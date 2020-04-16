@@ -85,6 +85,13 @@ class DataGenerator:
 
 
 
+	def get_random_titles(self, num_titles):
+		fake = Faker()
+		titles = []
+		for i in range(num_titles):
+			titles.append(fake.sentence(4)[0:-1].title())
+		return titles
+
 
 
 
