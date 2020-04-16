@@ -14,7 +14,7 @@ class MySQLConnection:
 
 	def connection(self):
 		""" Returns MySQL connection. """ 
-		return pymysql.connect(read_default_file=self.opt_file)
+		return pymysql.connect(read_default_file=self.opt_file,autocommit=True)
 
 
 	def cursor(self, cursor_type=None):
