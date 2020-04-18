@@ -1,43 +1,37 @@
 import logging
 import configargparse
 import main.config as config
-from abc import ABC, abstractmethod 
 
 
 
-class App(ABC):
-
-	parser = configargparse.ArgParser(description='config parser')
+class App():
 
 
-	def add_config_options(self, p):
-		self.args = config.add_config_options(p)
+	def get_basic_parser(self):
+		return config.get_basic_parser()
 
 
-	def eval_log_level(self,args):
-		pass
-
-
-	def get_logger(self):
+	def get_logger(self,log_level=20):
 		logging_format = '%(asctime)s - %(filename)s - %(funcName)s (%(levelname)s):  %(message)s'
-		date_format = '%m/%d/%Y %I:%M:%S %p'
+		date_format = '%m/%d/%Y %I:%M:%S%p'
 		logging.basicConfig(
 			format=logging_format,
 			datefmt=date_format,
-			level=logging.DEBUG)
+			level=log_level)
 		logger = logging.getLogger(__name__)
 		return logger
 
 
 	def start(self):
-		LOG = self.get_logger()
+		logger = self.get_logger()
+		logger.info("APP START")
 		self._run()
-
+		self.cleanup()
 
 
 	def _run(self):
 		pass
 
 
-if __name__=="__main__":
-	App.start()
+	def cleanup(self):
+		pass

@@ -1,26 +1,35 @@
 import configargparse
 import configparser
+import argparse
+import logging
 
 """ Module for adding config options to apps """
 
 
-def add_config_options(p):
+class SetLogLevel(argparse.Action):
+	def __call__(self, parser, namespace, values, option_string=None):
+		level = getattr(logging,values.upper())
+		setattr(namespace, self.dest, level)
+
+
+def get_basic_parser():
+	p = configargparse.ArgParser(description='config parser')
 	d = p.add_argument_group(
 		title='default config options',
 		description='app agnostic configuration options')
 	d.add_argument('--config', '-c',
 		required=False,
 		help='path to config file',
-		is_config_file=True,)
+		is_config_file=True)
 	d.add_argument('--env',
 		required=False,
-		type=str,
 		choices=['prod', 'dev', 'staging'],
 		help='environment for runtime')
-	d.add_argument('--log-level',
+	d.add_argument('--loglevel', 
 		default='INFO',
-		type=str,
 		choices=['INFO', 'DEBUG', 'ERROR', 'CRITICAL', 'WARNING'],
-		help='log level to use for logging')
-	args = p.parse_args()
-	return args
+		help='log level to use for logging',
+		type=str,
+		action=SetLogLevel)
+	return p
+
